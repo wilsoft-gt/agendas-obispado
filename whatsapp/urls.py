@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from api.views import render_agenda, agenda_pdf, custom_login, discursante_pdf
 
 urlpatterns = [
@@ -23,4 +25,4 @@ urlpatterns = [
     path('agenda-pdf/<int:pk>/', agenda_pdf, name="descargaPDF"),
     path('discurso/<int:pk>/', discursante_pdf, name="discurso"),
     path('', custom_login, name="custom_login")
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
