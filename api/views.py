@@ -24,11 +24,11 @@ def agenda_pdf(request, pk):
     context = {"agenda": agenda}
     html = template.render(context)
 
-    pdf = create_pdf(html)
-    response = HttpResponse(pdf, content_type="application/pdf")
-    response['Content-Disposition'] = f'attachment; filename="Agenda_{agenda}.pdf"'
+    #pdf = create_pdf(html)
+    #response = HttpResponse(pdf, content_type="application/pdf")
+    #response['Content-Disposition'] = f'attachment; filename="Agenda_{agenda}.pdf"'
     
-    return response
+    return HttpResponse(html)
 
 def discursante_pdf(request, pk):
     discursante = Discursante.objects.get(pk=pk)
@@ -37,8 +37,8 @@ def discursante_pdf(request, pk):
     context = {"discursante": discursante}
     html = template.render(context)
 
-    pdf = create_pdf(html)
+    #pdf = create_pdf(html)
 
-    response = HttpResponse(pdf, content_type="application/pdf")
-    response['Content-Disposition'] = f'attachment; filename="{"_".join(discursante.nombre.split(" "))}_{discursante.agenda}.pdf"'
-    return response
+    #response = HttpResponse(pdf, content_type="application/pdf")
+    #response['Content-Disposition'] = f'attachment; filename="{"_".join(discursante.nombre.split(" "))}_{discursante.agenda}.pdf"'
+    return HttpResponse(html)

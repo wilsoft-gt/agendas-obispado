@@ -2,7 +2,7 @@ import asyncio
 from pyppeteer import launch
 
 async def html_to_pdf(html):
-    browser = await launch(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False)
+    browser = await launch(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False, headless=True)
     page = await browser.newPage()
     await page.setContent(html)
     pdf = await page.pdf({
