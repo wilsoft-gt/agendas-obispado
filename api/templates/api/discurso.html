@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carta discurso</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2em;
+    }
+    p {
+      font-size: 1.25em;
+    }
+
+    .body {
+      text-indent: 2em;
+    }
+
+    .fecha_carta {
+      text-align: right;
+    }
+
+  </style>
+  <script>
+    const fecha = () => {
+      let date = new Date()
+      document.querySelector(".fecha_carta").innerHTML = `Guatemala, ${date.toLocaleDateString('es-GT', {year: 'numeric', month: 'long', day: 'numeric',})}`
+    }
+  </script>
+</head>
+<body onLoad="fecha()">
+  <p class="fecha_carta"></p>
+  <p>Estimado(a) hermano(a) <span class="nombre_hermano">{{discursante.nombre}}</span></p>
+  <p class="body">Deseándole bendiciones sobre usted y su familia, reciba un cordial 
+    saludo de parte del obispado del barrio Pinares 1. El motivo de esta 
+    carta es para asignarle como discursante para la Reunión sacramental 
+    del domingo <strong class="fecha_discurso">{{discursante.agenda.fecha}}</strong>. El tema es: <strong>{{discursante.tema}}</strong>. Tendrá un tiempo estimado de 10 a 
+    12 minutos. Con la ayuda de las escrituras y la oración esperamos que 
+    se pueda preparar.
+  </p>
+  <p>
+    De antemano agradecemos su disposición de servir al Señor, atentamente
+  </p>
+  <p>
+    Obispado Barrio Pinares 1
+  </p>
+</body>
+</html>

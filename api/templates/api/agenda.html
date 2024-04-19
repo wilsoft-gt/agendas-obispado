@@ -1,0 +1,174 @@
+{% load utils %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda</title>
+  <style>
+    header {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    header > h2, header > h3 {
+      margin: 0 auto;
+    }
+
+    header > section {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+    }
+
+    footer > img {
+      display: block;
+      margin: 0 auto;
+      height: 150px;
+    }
+    .divider {
+      border-bottom: 1px solid black;
+      display: block;
+      height: 1em;
+      flex: 1;
+    }
+
+    .fw {
+      width: 100%;
+    }
+
+    main {
+      max-width: 100%;
+    }
+
+    main > p {
+      display: flex;
+      height: 1.5em;
+    }
+
+    .testimonios {
+      columns: 3;
+      word-break: break-all;
+      line-height: 40px;
+      width: auto;
+      column-gap: 1.5em 1.5em;
+    }
+
+    ul {
+      list-style-type: none;
+      margin-block-start: 0;
+    }
+
+    li.with-bullet:before {
+      content: "\25A1";
+      font-size: 2em;
+      margin-right: 0.5em;
+    }
+
+    @page {
+      @bottom {
+        content: counter(page);
+      }
+    }
+
+  </style>
+</head>
+<body>
+  {% if agenda %}
+    <header>
+      <h2>Reunion Sacramental</h2>
+      <h3>Barrio Pinares 1</h3>
+      <br /><br />
+      <section>{{agenda.fecha}}</section>
+    </header>
+    <main>
+      <p><strong>Bienvenida:&nbsp;</strong>A todos los presentes; <span class="divider"> </span></p>
+      <p><strong>Preside:&nbsp;</strong>{{agenda.preside.get_llamamiento_display}} {{agenda.preside.nombre}}</p>
+      <p><strong>Dirige:&nbsp;</strong>{{agenda.dirige.get_llamamiento_display}} {{agenda.dirige.nombre}}</p>
+      <p><strong>Piano:&nbsp;</strong> {{agenda.piano}}</p>
+      <p><strong>Direccion de los himnos:&nbsp;</strong> {{agenda.direccion_himnos}}</p>
+      <p><strong>Reconocimento de lideres:&nbsp;</strong><span class="divider"></span></p>
+      <p><span class="divider"></span></p>
+      <p><strong>Primer Himno:&nbsp;</strong> {{agenda.himno_set.values| himno:'1er'}}</p>
+      <p><strong>Primera oracion:&nbsp;</strong>  {{agenda.oracion_set.values|oracion:'primera'}}</p>
+      {% if agenda.asunto_set.values|length > 0 %}
+        <p><strong>Asuntos de barrio</strong></p>
+        <ul>
+          {% for asunto in agenda.asunto_set.all  %}
+            <li class="with-bullet">{{asunto.descripcion}}</li>
+          {% endfor %}
+          <p><span class="divider"></span></p>
+          <p><span class="divider"></span></p>
+        </ul>
+      {% endif %}
+      <p><strong>Asuntos de estaca</strong></p>
+      <p><strong>Tiempo para bendecir la santa cena</strong></p>
+      <p><strong>Himno sacramental</strong> {{agenda.himno_set.values | himno:'2do'}}</p>
+      {% if agenda.primer_domingo %}
+        <p style="page-break-before: always;"><strong>Testimonios</strong></p>  
+        <div class="testimonios">
+          ________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+        </div>
+        <p><strong>Anuncios</strong></p>
+        <ul>
+          {% if agenda.actividad_set.values|length > 0 %}
+            {% for anuncio in agenda.actividad_set.values %}
+              <li class="with-bullet">{{anuncio.fecha}} - {{anuncio.descripcion}}</li>
+            {% endfor %}
+          {% endif %}
+          {% if agenda.templo_set.values|length > 0 %}
+            {% for templo in agenda.templo_set.values %}
+              <li class="with-bullet">{{templo.fecha}}</li>
+            {% endfor %}
+          {% endif %}
+          <p><span class="divider"></span></p>
+          <p><span class="divider"></span></p>
+        </ul>
+      {% else %}
+        <p><strong>Discursantes</strong></p>
+        <p><strong>Primer discursante:&nbsp;</strong> {{agenda.discursante_set.values.0.nombre}}</p>
+        {% if agenda.actividad_set.values|length > 0 %}
+          <p style="page-break-before: always;"><strong>Anuncios</strong></p>
+          <ul>
+            {% if agenda.actividad_set.values|length > 0 %}
+              {% for anuncio in agenda.actividad_set.all %}
+                <li class="with-bullet">{{anuncio.fecha}} - {{anuncio.descripcion}}</li>
+              {% endfor %}
+            {% endif %}
+            {% if agenda.templo_set.values|length > 0 %}
+              {% for templo in agenda.templo_set.all %}
+                <li class="with-bullet">Ida al templo {{templo.fecha}} - {{templo.observaciones}}</li>
+              {% endfor %}
+            {% endif %}
+            <p><span class="divider"></span></p>
+            <p><span class="divider"></span></p>
+          </ul>
+        {% endif %}
+        <p><strong>Himno intermedio:&nbsp;</strong> {{agenda.himno_set.values | himno:'3er'}}</p>
+        <p><strong>Segundo discursante:&nbsp;</strong> {{agenda.discursante_set.values.1.nombre}}</p>
+        {% if agenda.discursante_set.values.1.nombre %}
+          <p><strong>Tercer discursante:&nbsp;</strong> {{agenda.discursante_set.values.1.nombre}}</p>
+        {% endif %}
+        {% if agenda.discursante_set.values.2.nombre %}
+          <p><strong>Cuarto discursante:&nbsp;</strong> {{agenda.discursante_set.values.2.nombre}}</p>
+        {% endif %}
+        {% if agenda.discursante_set.values.3.nombre %}
+          <p><strong>Quinto discursante:&nbsp;</strong> {{agenda.discursante_set.values.3.nombre}}</p>
+        {% endif %}
+        {% if agenda.discursante_set.values.4.nombre %}
+          <p><strong>Quinto discursante:&nbsp;</strong> {{agenda.discursante_set.values.4.nombre}}</p>
+        {% endif %}
+      {% endif %}
+      <p><strong>Agradecimiento especial a todos los Hnos y Hnas que hacen posible esta reunion</strong></p>
+      <p><strong>Ultimo Himno:&nbsp;</strong> {{agenda.himno_set.values | himno:'4to'}}</p>
+      <p><strong>Ultima Oracion:&nbsp;</strong> {{agenda.oracion_set.values | oracion:'final'}}</p>
+    </main>
+    <footer>
+      <br /><br /><br /><br /><br />
+      <img src="https://www.churchofjesuschrist.org/imgs/0fd2691a8a019111765601085628ed5183d2c812/full/200%2C/0/default.png" alt="Iglesia logo">
+    </footer>
+  {% else %}
+    <h2>No hay agenda para la fecha seleccionada</h2>
+  {% endif %}
+</body>
+</html>
