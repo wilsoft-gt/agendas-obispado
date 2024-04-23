@@ -73,7 +73,7 @@ class Limpieza(models.Model):
 
 class Oracion(models.Model):
 	nombre = models.CharField(max_length=50)
-	tipo = models.CharField(choices=TIPO_ORACION, max_length=10)
+	tipo = models.CharField(choices=TIPO_ORACION, max_length=10, blank=True)
 	confirmado = models.BooleanField(default=False)
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
