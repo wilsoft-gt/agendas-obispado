@@ -1,9 +1,7 @@
-import asyncio
 from django.shortcuts import render, HttpResponse
 from django.template.loader import get_template
 from .models import Agenda, Discursante
-from .utils import create_pdf
-import threading
+
 # Create your views here.
 
 def render_agenda(request, pk):

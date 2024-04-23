@@ -16,3 +16,4 @@ urllib3==1.26.18
 websockets==10.4
 whitenoise==6.6.0
 zipp==3.18.1
+mysqlclient==2.2.4

@@ -17,7 +17,7 @@ ENV DJANGO_SUPERUSER_USERNAME="wilsoft"
 ENV DJANGO_SUPERUSER_PASSWORD="admin123."
 
 #Install dependencies
-RUN apk add gcc python3-dev jpeg-dev zlib-dev musl-dev
+RUN apk add gcc python3-dev jpeg-dev zlib-dev musl-dev mysql-client
 RUN pip install -r requirements.txt
 
 #Generate database tables and superuser
