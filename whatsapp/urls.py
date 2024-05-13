@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from api.views import render_agenda, agenda_pdf, custom_login, discursante_pdf
+from api.views import render_agenda, agenda_pdf, custom_login, discursante_pdf, oracion_pdf
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('<int:pk>/', render_agenda, name="agenda"),
     path('agenda-pdf/<int:pk>/', agenda_pdf, name="descargaPDF"),
     path('discurso/<int:pk>/', discursante_pdf, name="discurso"),
+    path('oracion/<int:pk>/', oracion_pdf, name="oracion"),
     path('', custom_login, name="custom_login")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

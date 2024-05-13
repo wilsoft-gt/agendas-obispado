@@ -40,6 +40,15 @@ class OracionInline(admin.TabularInline):
 	verbose_name="Oracion"
 	verbose_name_plural="Oraciones"
 
+	def descargar(self, obj):
+		if obj.pk is not None:
+			return format_html(f'<a class="btn btn-warning" href="/oracion/{obj.pk}/">Descargar pdf</a>')
+		else:
+			return format_html('<span></span>')
+		
+	descargar.short_description="Carta"
+	readonly_fields = ("descargar",)
+
 
 class ActividadInline(admin.TabularInline):
 	model=Actividad.agenda.through

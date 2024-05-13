@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.template.loader import get_template
-from .models import Agenda, Discursante
+from .models import Agenda, Discursante, Oracion
 
 # Create your views here.
 
@@ -21,10 +21,6 @@ def agenda_pdf(request, pk):
     template = get_template("api/agenda.html")
     context = {"agenda": agenda}
     html = template.render(context)
-
-    #pdf = create_pdf(html)
-    #response = HttpResponse(pdf, content_type="application/pdf")
-    #response['Content-Disposition'] = f'attachment; filename="Agenda_{agenda}.pdf"'
     
     return HttpResponse(html)
 
@@ -35,8 +31,13 @@ def discursante_pdf(request, pk):
     context = {"discursante": discursante}
     html = template.render(context)
 
-    #pdf = create_pdf(html)
+    return HttpResponse(html)
 
-    #response = HttpResponse(pdf, content_type="application/pdf")
-    #response['Content-Disposition'] = f'attachment; filename="{"_".join(discursante.nombre.split(" "))}_{discursante.agenda}.pdf"'
+def oracion_pdf(request, pk):
+    oracion = Oracion.objects.get(pk=pk)
+
+    template = get_template("api/oracion.html")
+    context = {"oracion": oracion}
+    html = template.render(context)
+
     return HttpResponse(html)

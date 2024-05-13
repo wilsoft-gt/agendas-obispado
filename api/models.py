@@ -1,6 +1,7 @@
 from django.db import models
 from .opciones import LLAMAMIENTOS, LISTA_HIMNOS, TIPO_HIMNO, TIPO_ORACION
 
+
 # Create your models here.
 
 class Obispado(models.Model):
@@ -110,3 +111,5 @@ class Discursante(models.Model):
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
 		return	f"{self.nombre} - {self.tema}"
+
+	
