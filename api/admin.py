@@ -27,7 +27,7 @@ class DiscursanteInline(admin.TabularInline):
 
 	def descargar(self, obj):
 		if obj.pk is not None:
-			return format_html(f'<a class="btn btn-warning" href="/discurso/{obj.pk}/">Descargar pdf</a>')
+			return format_html(f'<a class="btn btn-warning" href="/discurso/{obj.pk}/" target="_blank">Descargar pdf</a>')
 		else:
 			return format_html('<span></span>')
 	descargar.short_description = "Carta"
@@ -42,7 +42,7 @@ class OracionInline(admin.TabularInline):
 
 	def descargar(self, obj):
 		if obj.pk is not None:
-			return format_html(f'<a class="btn btn-warning" href="/oracion/{obj.pk}/">Descargar pdf</a>')
+			return format_html(f'<a class="btn btn-warning" href="/oracion/{obj.pk}/" target="_blank">Descargar pdf</a>')
 		else:
 			return format_html('<span></span>')
 		
@@ -80,7 +80,7 @@ class AgendaAdmin(admin.ModelAdmin):
 	]
 
 	def descargar(self, obj):
-		return format_html(f'<a class="btn btn-warning" href="/agenda-pdf/{obj.pk}/">Descargar pdf</a>')
+		return format_html(f'<a class="btn btn-warning" href="/agenda-pdf/{obj.pk}/" target="_blank">Descargar pdf</a>')
   
 	descargar.short_description = "Agenda"
 	list_display = ['fecha', 'descargar']
