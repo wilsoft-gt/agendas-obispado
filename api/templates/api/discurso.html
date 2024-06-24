@@ -11,7 +11,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 2em;
+      gap: 8em;
     }
     p {
       font-size: 1.25em;
@@ -25,6 +25,13 @@
       text-align: right;
     }
 
+    #logo {
+      position: absolute;
+      top: 0;
+      height: 150px;
+
+    }
+
   </style>
   <script>
     const fecha = () => {
@@ -34,18 +41,24 @@
   </script>
 </head>
 <body onLoad="fecha();print();">
-  <p class="fecha_carta"></p>
-  <p>Estimado(a) hermano(a) <span class="nombre_hermano">{{discursante.nombre}}</span></p>
-  <p class="body">Deseándole bendiciones sobre usted y su familia, reciba un cordial 
-    saludo de parte del obispado del barrio Pinares 1. El motivo de esta 
-    carta es para asignarle como discursante para la Reunión sacramental 
-    del domingo <strong class="fecha_discurso">{{discursante.agenda.fecha}}</strong>. El tema es: <strong>{{discursante.tema}}</strong>. Tendrá un tiempo estimado de 10 a 
-    12 minutos. Con la ayuda de las escrituras y la oración esperamos que 
-    se pueda preparar.
-  </p>
-  <p>
-    De antemano agradecemos su disposición de servir al Señor, atentamente
-  </p>
+  <img id="logo" src="https://www.churchofjesuschrist.org/imgs/0fd2691a8a019111765601085628ed5183d2c812/full/200%2C/0/default.png" alt="Iglesia logo">
+  <div>
+    <p class="fecha_carta"></p>
+    <br />
+    <p>Estimado(a) hermano(a) <span class="nombre_hermano">{{discursante.nombre}}</span></p>
+  </div>
+  <div>
+    <p class="body">Deseándole bendiciones sobre usted y su familia, reciba un cordial 
+      saludo de parte del obispado del barrio Pinares 1. El motivo de esta 
+      carta es para asignarle como discursante para la Reunión sacramental 
+      del domingo <strong class="fecha_discurso">{{discursante.agenda.fecha}}</strong>. El tema es: <strong>{{discursante.tema}}</strong>. Tendrá un tiempo estimado de 10 a 
+      12 minutos. Con la ayuda de las escrituras y la oración esperamos que 
+      se pueda preparar para que el Espiritu le guíe y pueda edificar a los participantes de la reunion sacramental.
+    </p>
+    <p>
+      De antemano agradecemos su disposición de servir al Señor, atentamente
+    </p>
+  </div>
   <p>
     Obispado Barrio Pinares 1
   </p>

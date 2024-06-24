@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agenda</title>
+  <title>Agenda {{agenda.fecha}}</title>
   <style>
+    :root {
+      --header: 1.60em;
+      --sub_header: 1.27em;
+      --text: 1.10em;
+    }
+
     header {
       display: flex;
       flex-direction: column;
@@ -13,6 +19,10 @@
 
     header > h2, header > h3 {
       margin: 0 auto;
+    }
+    
+    p, p * {
+      font-size: var(--text)
     }
 
     header > section {
@@ -65,16 +75,41 @@
       margin-right: 0.5em;
     }
 
+    .controls {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     @page {
       @bottom {
         content: counter(page);
       }
     }
 
+    @media print {
+      .controls {
+        display: none;
+      }
+    }
+
   </style>
+
 </head>
-<body onLoad="print()">
+<body onLoad="">
   {% if agenda %}
+  <div class="controls">
+    <label for="font_size">
+      Tamaño de fuente
+      <select name="font_size" id="font_size">
+        <option value="default">Normal</option>
+        <option value="medium" selected>Mediano</option>
+        <option value="large">Grande</option>
+      </select>
+    </label>
+    <button onClick="print()">Imprimir</button>
+  </div>
     <header>
       <h2>Reunion Sacramental</h2>
       <h3>Barrio Pinares 1</h3>
@@ -127,39 +162,42 @@
       {% else %}
         <p><strong>Discursantes</strong></p>
         <p><strong>Primer discursante:&nbsp;</strong> {{agenda.discursante_set.values.0.nombre}}</p>
-        {% if agenda.actividad_set.values|length > 0 %}
-          <p style="page-break-before: always;"><strong>Anuncios</strong></p>
-          <ul>
-            {% if agenda.actividad_set.values|length > 0 %}
-              {% for anuncio in agenda.actividad_set.all %}
-                <li class="with-bullet">{{anuncio.fecha}} - {{anuncio.descripcion}}</li>
-              {% endfor %}
-            {% endif %}
-            {% if agenda.templo_set.values|length > 0 %}
-              {% for templo in agenda.templo_set.all %}
-                <li class="with-bullet">Ida al templo {{templo.fecha}} - {{templo.observaciones}}</li>
-              {% endfor %}
-            {% endif %}
-            <p><span class="divider"></span></p>
-            <p><span class="divider"></span></p>
-          </ul>
-        {% endif %}
         <p><strong>Himno intermedio:&nbsp;</strong> {{agenda.himno_set.values | himno:'3er'}}</p>
-        <p><strong>Segundo discursante:&nbsp;</strong> {{agenda.discursante_set.values.1.nombre}}</p>
-        {% if agenda.discursante_set.values.1.nombre %}
-          <p><strong>Tercer discursante:&nbsp;</strong> {{agenda.discursante_set.values.1.nombre}}</p>
+        {% if agenda.actividad_set.values|length > 0 %}
+        <! Se debe agregar lo siguiente para hacer un corte de pagina para imprimir: page-break-before: always>  
+        <div style="break-inside: avoid;">
+          <p><strong>Anuncios</strong></p>
+            <ul>
+              {% if agenda.actividad_set.values|length > 0 %}
+                {% for anuncio in agenda.actividad_set.all %}
+                  <li class="with-bullet">{{anuncio.fecha}} - {{anuncio.descripcion}}</li>
+                {% endfor %}
+              {% endif %}
+              {% if agenda.templo_set.values|length > 0 %}
+                {% for templo in agenda.templo_set.all %}
+                  <li class="with-bullet">Ida al templo {{templo.fecha}} - {{templo.observaciones}}</li>
+                {% endfor %}
+              {% endif %}
+              <p><span class="divider"></span></p>
+              <p><span class="divider"></span></p>
+            </ul>
+        </div>
         {% endif %}
+        <p><strong>Agradecimiento especial a todos los Hnos y Hnas que hacen posible esta reunion</strong></p>
+        <p><strong>Segundo discursante:&nbsp;</strong> {{agenda.discursante_set.values.1.nombre}}</p>
         {% if agenda.discursante_set.values.2.nombre %}
-          <p><strong>Cuarto discursante:&nbsp;</strong> {{agenda.discursante_set.values.2.nombre}}</p>
+          <p><strong>Tercer discursante:&nbsp;</strong> {{agenda.discursante_set.values.2.nombre}}</p>
         {% endif %}
         {% if agenda.discursante_set.values.3.nombre %}
-          <p><strong>Quinto discursante:&nbsp;</strong> {{agenda.discursante_set.values.3.nombre}}</p>
+          <p><strong>Cuarto discursante:&nbsp;</strong> {{agenda.discursante_set.values.3.nombre}}</p>
         {% endif %}
         {% if agenda.discursante_set.values.4.nombre %}
           <p><strong>Quinto discursante:&nbsp;</strong> {{agenda.discursante_set.values.4.nombre}}</p>
         {% endif %}
+        {% if agenda.discursante_set.values.5.nombre %}
+          <p><strong>Quinto discursante:&nbsp;</strong> {{agenda.discursante_set.values.5.nombre}}</p>
+        {% endif %}
       {% endif %}
-      <p><strong>Agradecimiento especial a todos los Hnos y Hnas que hacen posible esta reunion</strong></p>
       <p><strong>Ultimo Himno:&nbsp;</strong> {{agenda.himno_set.values | himno:'4to'}}</p>
       <p><strong>Ultima Oracion:&nbsp;</strong> {{agenda.oracion_set.values | oracion:'final'}}</p>
     </main>
@@ -171,4 +209,30 @@
     <h2>No hay agenda para la fecha seleccionada</h2>
   {% endif %}
 </body>
+<script>
+  let size = {
+    default: {
+      header: "1.5em",
+      sub_header: "1.17em",
+      text: "1em"
+    }, 
+    medium: {
+      header: "1.60em",
+      sub_header: "1.27em",
+      text: "1.10em"
+    }, 
+    large: {
+      header: "1.70em",
+      sub_header: "1.37em",
+      text: "1.20em"
+    }
+  }
+  document.querySelector("#font_size").addEventListener("change", (e) => {
+    const value = e.target.value
+    document.documentElement.style.setProperty("--header", size[value].header)
+    document.documentElement.style.setProperty("--sub_header", size[value].sub_header)
+    document.documentElement.style.setProperty("--text", size[value].text)
+  })
+  
+</script>
 </html>
