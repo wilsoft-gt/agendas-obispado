@@ -14,10 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from api.views import render_agenda, agenda_pdf, custom_login, discursante_pdf, oracion_pdf
+from access.views import EndPointViewset
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +26,6 @@ urlpatterns = [
     path('agenda-pdf/<int:pk>/', agenda_pdf, name="descargaPDF"),
     path('discurso/<int:pk>/', discursante_pdf, name="discurso"),
     path('oracion/<int:pk>/', oracion_pdf, name="oracion"),
-    path('', custom_login, name="custom_login")
+    path('', custom_login, name="custom_login"),
+    path('api/V1.0/wa/webhoook/', EndPointViewset.as_view(), name="webhook"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
