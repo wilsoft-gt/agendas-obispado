@@ -106,7 +106,10 @@ class WhatsappHandler:
        return self.data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
     
     def post_handler(self, action_function, *args):
-      http = urllib3.PoolManager()
+      if settings.DEBUG:
+        http = urllib3.PoolManager()
+      else:
+        http = urllib3.ProxyManager(env('PROXY'))
       headers = {"Content-Type": "application/json", "Authorization": f"Bearer {env('API_AUTH_TOKEN')}"}
       body = json.dumps(action_function(self.get_phone_number(), *args))
       response = http.request("POST", env("API_URL"), headers=headers, body=body)
