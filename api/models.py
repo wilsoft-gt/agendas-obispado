@@ -89,7 +89,7 @@ class Asunto(models.Model):
 	encargado = models.ForeignKey(Obispado, models.SET_NULL, blank=True, null=True)
 	agenda = models.ManyToManyField(Agenda, blank=True)
 	def __str__(self):
-		return	f"{self.titulo} - {self.organizacion}"
+		return	f"{self.fecha.strftime('%d/%m/%Y')} {self.titulo} - {self.organizacion}"
 
 class Actividad(models.Model):
 	organizacion = models.ForeignKey(Organizacion, models.SET_NULL, blank=False, null=True)
@@ -102,7 +102,7 @@ class Actividad(models.Model):
 	class Meta(object):
 		verbose_name_plural = "Actividades"
 	def __str__(self):
-		return	f"{self.titulo} - {self.organizacion}"
+		return	f"{self.fecha.strftime('%d/%m/%Y %I:%M %p')} {self.titulo} - {self.organizacion}"
 
 class Discursante(models.Model):
 	nombre = models.CharField(max_length=50)

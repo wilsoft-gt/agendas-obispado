@@ -148,12 +148,18 @@
         <ul>
           {% if agenda.actividad_set.values|length > 0 %}
             {% for anuncio in agenda.actividad_set.values %}
-              <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> - <i>{{anuncio.fecha}}</i> - {{anuncio.descripcion}}</li>
+              <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> ({{anuncio.organizacion}}) <i>{{anuncio.fecha|date:"l j F P"}}</i> - {{anuncio.descripcion}}</li>
             {% endfor %}
           {% endif %}
           {% if agenda.templo_set.values|length > 0 %}
             {% for templo in agenda.templo_set.values %}
-              <li class="with-bullet">{{templo.fecha}} - Visita al templo. {{templo.observaciones}}</li>
+              <li class="with-bullet">{{templo.fecha|date:"l j F P"}} - Visita al templo. {{templo.observaciones}}</li>
+            {% endfor %}
+          {% endif %}
+          {% if agenda.limpieza_set.values|length > 0 %}
+            {% for limpieza in agenda.limpieza_set.all %}
+              <li class="with-bullet"><strong>Limpieza:&nbsp;</strong>- {{limpieza.organizacion}} tiene asignada la limpieza esta semana
+              </li>
             {% endfor %}
           {% endif %}
           <p><span class="divider"></span></p>
@@ -170,12 +176,18 @@
             <ul>
               {% if agenda.actividad_set.values|length > 0 %}
                 {% for anuncio in agenda.actividad_set.all %}
-                  <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> - <i>{{anuncio.fecha}}</i> - {{anuncio.descripcion}}</li>
+                  <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> ({{anuncio.organizacion}}) <i>{{anuncio.fecha|date:"l j F P"}}</i> - {{anuncio.descripcion}}</li>
                 {% endfor %}
               {% endif %}
               {% if agenda.templo_set.values|length > 0 %}
                 {% for templo in agenda.templo_set.all %}
                   <li class="with-bullet">Ida al templo {{templo.fecha}} - {{templo.observaciones}}</li>
+                {% endfor %}
+              {% endif %}
+              {% if agenda.limpieza_set.values|length > 0 %}
+                {% for limpieza in agenda.limpieza_set.all %}
+                  <li class="with-bullet"><strong>Limpieza:&nbsp;</strong>- {{limpieza.organizacion}} tiene asignada la limpieza esta semana
+                  </li>
                 {% endfor %}
               {% endif %}
               <p><span class="divider"></span></p>
