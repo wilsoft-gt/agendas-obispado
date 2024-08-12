@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .permissions import AccessTokenPermission
 from .models import AuthToken
 from .whatsapp import WhatsappHandler, proximo_domingo
-from api.models import Discursante, Oracion
+from api.models import Discursante, Oracion, Agenda
 
 allowed_actions = ["discur", "oraci"]
 
@@ -52,7 +52,12 @@ class EndPointViewset(APIView):
             dis_lista = [f"\n{dis.nombre} - _{dis.tema}_" for dis in discursantes]
             body = f"*Lista de discursantes para el domingo {proximo_domingo().strftime('%d/%m/%Y')}:* {''.join(dis_lista)}"
         else:
-            body = f"No hay discursantes registrados para el domingo {proximo_domingo().strftime('%d/%m/%Y')}. \n Puedes ver las agendas siguiendo el siguiente link:\n https://wilsoft.pythonanywhere.com/admin/api/agenda/"
+            if Agenda.objects.filter(fecha=proximo_domingo()).exists():
+                agenda = Agenda.objects.get(fecha=proximo_domingo())
+                print(f"El id de la agenda es: {agenda.id}")
+                body = f"No hay information de discursantes para el domingo {proximo_domingo().strftime('%d/%m/%Y')}, puedes ver la agenda en el siguiente link: \n https://wilsoft.pythonanywhere.com/agenda-pdf/{agenda.id}/"
+            else:
+                body = f"No se encontro una agenda registrada para el domingo {proximo_domingo().strftime('%d/%m/%Y')}. \n Puedes ver o crear las agendas siguiendo el siguiente link:\n https://wilsoft.pythonanywhere.com/admin/api/agenda/"
         handler.return_reaction()
         handler.return_text_message(body)
 
@@ -62,6 +67,10 @@ class EndPointViewset(APIView):
             ora_lista = [f"\n{ora.nombre} - _{ora.tipo}_" for ora in oraciones]
             body = f"*Lista de oraciones para el domingo {proximo_domingo().strftime('%d/%m/%Y')}:* {''.join(ora_lista)}"
         else:
-            body = f"No hay oraciones registradas para el domingo {proximo_domingo().strftime('%d/%m/%Y')} \n Puedes ver las agendas siguiendo el siguiente link:\n https://wilsoft.pythonanywhere.com/admin/api/agenda/"
+            if Agenda.objects.filter(fecha=proximo_domingo()).exists():
+                agenda = Agenda.objects.get(fecha=proximo_domingo())
+                body = f"No hay information de oraciones para el domingo {proximo_domingo().strftime('%d/%m/%Y')}, puedes ver la agenda en el siguiente link: \n https://wilsoft.pythonanywhere.com/agenda-pdf/{agenda.id}/"
+            else:
+                body = f"No se encontro una agenda registrada para el domingo {proximo_domingo().strftime('%d/%m/%Y')}. \n Puedes ver o crear las agendas siguiendo el siguiente link:\n https://wilsoft.pythonanywhere.com/admin/api/agenda/"
         handler.return_reaction()
         handler.return_text_message(body)

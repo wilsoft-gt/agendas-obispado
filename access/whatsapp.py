@@ -32,7 +32,7 @@ def interactive_main_menu_response(phone_number):
       "text": "Selecciona una de las opciones. O puedes obtener los datos del domingo siguiente escribiendo: \ndiscursantes\noraciones"
     },
     "footer": {
-      "text": "Desarrollado por wilson romero (V0.1Alfa)"
+      "text": "Desarrollado por Wilson Romero (V1.0b)"
     },
     "action": {
       "buttons": [
