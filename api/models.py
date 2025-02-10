@@ -15,6 +15,7 @@ class Obispado(models.Model):
 
 class Organizacion(models.Model):
 	nombre = models.CharField(max_length=50)
+	nombre_corto = models.CharField(max_length=10)
 	codigo = models.CharField(max_length=15)
 	class Meta(object):
 		verbose_name_plural = "Organizaciones"
@@ -72,8 +73,15 @@ class Limpieza(models.Model):
 	def __str__(self):
 		return f"{self.fecha.strftime('%d/%m/%Y')} - {self.organizacion}"
 
+
+class Miembro(models.Model):
+	nombre = models.CharField(max_length=75)
+	def __str__(self):
+		return self.nombre
+
+
 class Oracion(models.Model):
-	nombre = models.CharField(max_length=50)
+	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, default=1)
 	tipo = models.CharField(choices=TIPO_ORACION, max_length=10, blank=True)
 	confirmado = models.BooleanField(default=False)
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
@@ -103,13 +111,13 @@ class Actividad(models.Model):
 		verbose_name_plural = "Actividades"
 	def __str__(self):
 		return	f"{self.fecha.strftime('%d/%m/%Y %I:%M %p')} {self.titulo} - {self.organizacion}"
+	
 
-class Discursante(models.Model):
-	nombre = models.CharField(max_length=50)
+
+class Discurso(models.Model):
+	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE)
 	tema = models.CharField(max_length=50)
 	cofirmado = models.BooleanField(default=False)
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
-		return	f"{self.nombre} - {self.tema}"
-
-	
+		return	f"{self.nombre.nombre} - {self.tema}"

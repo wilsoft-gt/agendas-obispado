@@ -1,0 +1,70 @@
+{% extends "admin/base_site.html" %}
+{% load static admin_list %}
+{% load i18n admin_urls %}
+
+{% block extrahead%} 
+    {{ block.super}}
+    {{ media.js }}
+    <script src="{% static 'fullcalendar/dist/index.global.js' %}" defer></script>
+{% endblock %}
+
+{% block content_title %}
+    <h1>Calendario de actividades</h1>
+{% endblock %}
+
+{% block content_subtitle %}
+    <p>Selecciona una fecha para agregar una actividad nueva</p>
+{% endblock content_subtitle %}
+
+
+{% block page_actions %}
+    <div class="col-12 col-md-auto d-flex align-items-center justify-content-end page-actions">
+        {% block object-tools %}
+            {% block object-tools-items %}
+                {% change_list_object_tools %}
+            {% endblock %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+
+{% block content %}  
+    <div id="calendar" class="col-10 m-0 m-auto"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let calendarEl = document.getElementById('calendar')
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                themeSystem: 'bootstrap5',
+                locale: "es",
+                headerToolbar: {
+                    left: 'listYear,listMonth',
+                    center: 'title',
+                    right: 'prev,dayGridMonth,dayGridWeek,dayGridDay,next'
+                },
+                buttonText: {
+                    listYear: "Lista por año",
+                    listMonth: "Lista por mes",
+                    today: "Hoy",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Dia"
+                },
+                events: [
+                    {% for item in cl.result_list %}
+                        {
+                            id: {{item.id}},
+                            title: "{{item.organizacion.nombre_corto}} - {{item.titulo}}",
+                            start: '{{item.fecha | date:"Y-m-d"}}T{{item.fecha | date:"H:i:s"}}'
+                        },
+                    {% endfor %}
+                ],
+                eventClick: function(info) {
+                    window.location.href = `${window.location.origin}${window.location.pathname}${info.event.id}/change`
+                    //alert('clicked on: '+ JSON.stringify(info.event))
+                }   
+            });
+            calendar.render();
+        })
+    </script>
+{% endblock %}

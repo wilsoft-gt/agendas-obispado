@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .permissions import AccessTokenPermission
 from .models import AuthToken
 from .whatsapp import WhatsappHandler, proximo_domingo
-from api.models import Discursante, Oracion, Agenda
+from api.models import Discurso, Oracion, Agenda
 
 allowed_actions = ["discur", "oraci"]
 

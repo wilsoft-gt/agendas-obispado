@@ -1,5 +1,6 @@
 from django import template
 from api.opciones import LISTA_HIMNOS
+from api.models import Miembro
 
 register = template.Library()
 
@@ -12,5 +13,15 @@ def himno(data, tipo):
 @register.filter
 def oracion(data, tipo):
     for value in data:
+        print(value)
         if value.get("tipo") == tipo:
-            return f"{value.get('nombre')}"
+            nombre = Miembro.objects.get(pk=value.get("nombre_id"))
+            return nombre.nombre
+        
+@register.filter
+def discursante(id):
+    if id:
+        nombre = Miembro.objects.get(pk=id)
+        return nombre.nombre
+    else:
+        return "Sin asignar"

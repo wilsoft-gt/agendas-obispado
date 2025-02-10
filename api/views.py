@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.template.loader import get_template
-from .models import Agenda, Discursante, Oracion
+from .models import Agenda, Discurso, Oracion
 
 # Create your views here.
 
@@ -25,7 +25,7 @@ def agenda_pdf(request, pk):
     return HttpResponse(html)
 
 def discursante_pdf(request, pk):
-    discursante = Discursante.objects.get(pk=pk)
+    discursante = Discurso.objects.get(pk=pk)
 
     template= get_template("api/discurso.html")
     context = {"discursante": discursante}

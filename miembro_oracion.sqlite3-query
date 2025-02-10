@@ -1,0 +1,17 @@
+-- database: /home/wilsoft/cosas para aprender/pagina web/backend/whatsapp/db.sqlite3
+-- Use the ▷ button in the top right corner to run the entire file.
+BEGIN TRANSACTION;
+
+SELECT
+  *
+FROM
+  api_oracion;
+
+SELECT
+  *
+FROM
+  api_miembro;
+
+ROLLBACK;
+
+COMMIT;
