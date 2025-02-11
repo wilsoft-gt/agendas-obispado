@@ -81,7 +81,7 @@ class Miembro(models.Model):
 
 
 class Oracion(models.Model):
-	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, default=1)
+	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, null=True)
 	tipo = models.CharField(choices=TIPO_ORACION, max_length=10, blank=True)
 	confirmado = models.BooleanField(default=False)
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
@@ -115,7 +115,7 @@ class Actividad(models.Model):
 
 
 class Discurso(models.Model):
-	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE)
+	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, null=True)
 	tema = models.CharField(max_length=50)
 	cofirmado = models.BooleanField(default=False)
 	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
