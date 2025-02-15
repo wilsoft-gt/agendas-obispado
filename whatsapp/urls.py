@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from api.views import render_agenda, agenda_pdf, custom_login, discursante_pdf, oracion_pdf
+from api.views import render_agenda, agenda_pdf, home, discursante_pdf, oracion_pdf
 from access.views import EndPointViewset
 
 urlpatterns = [
@@ -26,6 +26,6 @@ urlpatterns = [
     path('agenda-pdf/<int:pk>/', agenda_pdf, name="descargaPDF"),
     path('discurso/<int:pk>/', discursante_pdf, name="discurso"),
     path('oracion/<int:pk>/', oracion_pdf, name="oracion"),
-    path('', custom_login, name="custom_login"),
+    path('', home, name="home"),
     path('api/V1.0/wa/webhoook/', EndPointViewset.as_view(), name="webhook"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

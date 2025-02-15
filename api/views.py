@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.template.loader import get_template
-from .models import Agenda, Discurso, Oracion
+from .models import Agenda, Discurso, Oracion, Actividad
 
 # Create your views here.
 
@@ -10,9 +10,14 @@ def render_agenda(request, pk):
         return render(request, "api/agenda.html", {"agenda": agenda})
     except Agenda.DoesNotExist:
         return render(request, "api/agenda.html")
-    
-def custom_login(request):
-    return render(request, "api/login.html")
+
+def home(request):
+    try:
+        actividad = Actividad.objects.all()
+        return render(request, "api/home.html", {"actividad": actividad})
+    except:
+        return render(request, "api/home.html")
+
     
 def agenda_pdf(request, pk):
 

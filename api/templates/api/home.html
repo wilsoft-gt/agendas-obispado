@@ -1,0 +1,158 @@
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="{% static 'fullcalendar/js/index.global.min.js' %}" defer></script>
+  <title>Actividades</title>
+  <style>
+    body {
+      margin: 0;
+      pading: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+
+    main {
+      max-width: 75%;
+      margin: 0 auto;
+    }
+
+    .fc-toolbar-title {
+
+      text-align: center;
+    }
+    
+    @media (max-width: 800px) {
+      main {
+        max-width: 85%;
+        margin: 0 auto;
+      }
+      .fc {
+        font-size: .9em;
+      }
+    
+      .fc-toolbar {
+        flex-wrap: wrap;
+      }
+    
+      .fc-toolbar-chunk:nth-child(2){
+        order: -1;
+        margin: 0 auto;
+      }
+      
+    }
+    
+    @media (max-width: 799px) {
+      main {
+        max-width: 95%;
+        margin: 0 auto;
+      }
+      .fc-toolbar {
+        flex-direction: column;
+      }
+    }
+
+    @media print {
+      .fc-button-group {
+        display: none !important;
+      }
+    }
+
+    #eventDialog::backDrop {
+      background-color: rgba(0,0,0,0.7)
+    }
+
+    #eventDialog {
+      border: none;
+      border-radius: 10px;
+      padding: 2em;
+    }
+
+  </style>
+
+</head>
+<body>
+  <main style="display: flex; flex-direction: column;">
+    <h1 style="margin: 0 auto;">Barrio Pianres 1</h1>
+    <h2 style="margin: 0 auto;">Actividades</h2>
+    <dialog id="eventDialog">
+      <div class="detalles">
+        <h2 id="eventTitle"></h2>
+        <p>Organizacion: <span id="eventOrganizacion"></span></h3>
+        <p id="eventDescripcion"></p>
+        <p>Lugar: <span id="eventLugar"></span></p>
+        <p>Fecha: <span id="eventFecha"></span></p>
+        <p>Hora: <span id="eventHora"></span></p>
+      </div>
+      <div class="acciones">
+        <button id="eventDialogclose">Cerrar</button>
+      </div>
+    </dialog>
+    <div id="calendar"></div>
+  </main>
+  <script>
+    const events = [
+      {% for item in actividad %}
+        {
+          id: {{item.id}},
+          title: "{{item.organizacion.nombre_corto}} - {{item.titulo}}",
+          start: "{{item.fecha | date:'Y-m-d'}}T{{item.fecha | date:'H:i:s'}}",
+          extendedProps: {
+            tituloSimple: `{{item.titulo}}`,
+            description: `{{item.descripcion}}`,
+            fecha: "{{item.fecha | date:'l d F Y' }}",
+            hora: "{{item.fecha | date:'h:i A'}}",
+            lugar: "ToBeDefined",
+            organizacion: "{{item.organizacion.nombre}}"
+          }
+        },
+      {% endfor %}
+    ]
+    document.addEventListener('DOMContentLoaded', function() {
+      let calendarEl = document.getElementById("calendar")
+      let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: window.innerWidth < 768 ? 'listYear' : 'dayGridMonth',
+        themeSystem: 'bootstrap5',
+        locale: 'es',
+        headerToolbar: {
+          left: 'listYear,listMonth',
+          center: 'title',
+          right: 'prev,dayGridMonth,dayGridWeek,dayGridDay,next'
+        },
+        buttonText: {
+          listYear: 'Lista por año',
+          listMonth: 'Lista por mes',
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Dia'
+        },
+        events: events,
+        eventClick: function(info){
+          console.log(info.event)
+          showModal(info.event)
+        }
+      })
+      calendar.render()
+    })
+
+    document.getElementById("eventDialogclose").addEventListener("click", () => {
+      document.getElementById("eventDialog").close()
+    })
+
+    const showModal = (data) => {
+      document.getElementById("eventTitle").innerText = data.extendedProps.tituloSimple
+      document.getElementById("eventOrganizacion").innerText = data.extendedProps.organizacion
+      document.getElementById("eventDescripcion").innerText = data.extendedProps.description
+      document.getElementById("eventLugar").innerText = data.extendedProps.lugar
+      document.getElementById("eventFecha").innerText = data.extendedProps.fecha
+      document.getElementById("eventHora").innerText = data.extendedProps.hora
+      document.getElementById("eventDialog").showModal()
+
+    }
+  </script>
+  
+</body>
+</html>
