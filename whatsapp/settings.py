@@ -141,3 +141,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'api/media')
 
 # esto es como va a mostrar el navegador la direccion, podria cambiarse a images y el servidor mostraria www.myweb.com/images?nombreendatabase=nombredelaimagen.png
 MEDIA_URL = "/media/"
+
+
+JAZZMIN_SETTINGS = {
+    "login_logo": "img/logo_circle_login.png",
+    "site_icon": "img/logo_circle.png",
+    "site_logo": "img/logo.png",
+    "icons": {
+        "access.AuthToken": "fas fa-key",
+        "api.Actividad": "fas fa-calendar-alt",
+        "api.Agenda": "fas fa-clipboard",
+        "api.Asunto": "fas fa-place-of-worship",
+        "api.Miembro": "fas fa-user",
+        "api.Obispado": "fas fa-user-tie",
+        "api.Organizacion": "fas fa-users",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+    },
+    "copyright": "Barrio Pinares 1"
+}

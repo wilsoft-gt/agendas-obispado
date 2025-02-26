@@ -58,6 +58,10 @@
       .fc-button-group {
         display: none !important;
       }
+
+      .actions {
+        display: none !important;
+      }
     }
 
     #eventDialog::backDrop {
@@ -70,11 +74,44 @@
       padding: 2em;
     }
 
+    .actions {
+      margin-top: 1em;
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .action {
+      text-decoration: none;
+      background-color: var(--fc-button-bg-color);
+      border-color: var(--fc-button-border-color);
+      color: var(--fc-button-text-color);
+      padding: 0.4em 0.65em;
+      border-radius: 0.25em;
+      border: 1px solid transparent;
+    }
+
+    .action:hover {
+      background-color: var(--fc-button-hover-bg-color);
+    }
+
+    .acciones {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+    }
+
   </style>
 
 </head>
 <body>
   <main style="display: flex; flex-direction: column;">
+    <section class="actions">
+      <button class="action" onClick="window.print()">Imprimir</button>
+      <a href="/admin" class="action">Ingresar</a>
+    </section>
     <h1 style="margin: 0 auto;">Barrio Pianres 1</h1>
     <h2 style="margin: 0 auto;">Actividades</h2>
     <dialog id="eventDialog">
@@ -87,7 +124,7 @@
         <p>Hora: <span id="eventHora"></span></p>
       </div>
       <div class="acciones">
-        <button id="eventDialogclose">Cerrar</button>
+        <button id="eventDialogclose" class="action">Cerrar</button>
       </div>
     </dialog>
     <div id="calendar"></div>
@@ -104,7 +141,7 @@
             description: `{{item.descripcion}}`,
             fecha: "{{item.fecha | date:'l d F Y' }}",
             hora: "{{item.fecha | date:'h:i A'}}",
-            lugar: "ToBeDefined",
+            lugar: "{{item.lugar}}",
             organizacion: "{{item.organizacion.nombre}}"
           }
         },

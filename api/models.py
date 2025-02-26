@@ -103,6 +103,7 @@ class Actividad(models.Model):
 	organizacion = models.ForeignKey(Organizacion, models.SET_NULL, blank=False, null=True)
 	titulo = models.CharField(max_length=50)
 	descripcion = models.TextField()
+	lugar = models.CharField(max_length=100)
 	fecha = models.DateTimeField(auto_now=False, auto_now_add=False)
 	presupuesto = models.BooleanField(default=False)
 	aprobado = models.BooleanField(default=False)
