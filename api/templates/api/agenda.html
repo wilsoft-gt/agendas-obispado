@@ -34,6 +34,7 @@
     footer > img {
       display: block;
       margin: 0 auto;
+      margin-top: 3em;
       height: 150px;
     }
     .divider {
@@ -144,46 +145,13 @@
         <div class="testimonios">
           ________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
         </div>
-        <p><strong>Anuncios</strong></p>
-        <ul>
-          {% if agenda.actividad_set.values|length > 0 %}
-            {% for anuncio in agenda.actividad_set.values %}
-              <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> ({{anuncio.organizacion}}) <i>{{anuncio.fecha|date:"l j F P"}}</i> - {{anuncio.descripcion}}</li>
-            {% endfor %}
-          {% endif %}
-          {% if agenda.limpieza_set.values|length > 0 %}
-            {% for limpieza in agenda.limpieza_set.all %}
-              <li class="with-bullet"><strong>Limpieza:&nbsp;</strong>- {{limpieza.organizacion}} tiene asignada la limpieza esta semana
-              </li>
-            {% endfor %}
-          {% endif %}
-          <p><span class="divider"></span></p>
-          <p><span class="divider"></span></p>
-        </ul>
       {% else %}
         <p><strong>Discursantes</strong></p>
         <p><strong>Primer discursante:&nbsp;</strong> {{agenda.discurso_set.values.0.nombre_id | discursante}}</p>
         <p><strong>Himno intermedio:&nbsp;</strong> {{agenda.himno_set.values | himno:'3er'}}</p>
         {% if agenda.actividad_set.values|length > 0 %}
         <! Se debe agregar lo siguiente para hacer un corte de pagina para imprimir: page-break-before: always>  
-        <div style="break-inside: avoid;">
-          <p><strong>Anuncios</strong></p>
-            <ul>
-              {% if agenda.actividad_set.values|length > 0 %}
-                {% for anuncio in agenda.actividad_set.all %}
-                  <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> ({{anuncio.organizacion}}) <i>{{anuncio.fecha|date:"l j F P"}}</i> - {{anuncio.descripcion}}</li>
-                {% endfor %}
-              {% endif %}
-              {% if agenda.limpieza_set.values|length > 0 %}
-                {% for limpieza in agenda.limpieza_set.all %}
-                  <li class="with-bullet"><strong>Limpieza:&nbsp;</strong>- {{limpieza.organizacion}} tiene asignada la limpieza esta semana
-                  </li>
-                {% endfor %}
-              {% endif %}
-              <p><span class="divider"></span></p>
-              <p><span class="divider"></span></p>
-            </ul>
-        </div>
+
         {% endif %}
         <p><strong>Agradecimiento especial a todos los hermanos y hermanas que hacen posible esta reunion</strong></p>
         <p><strong>Segundo discursante:&nbsp;</strong> {{agenda.discurso_set.values.1.nombre_id | discursante }}</p>
@@ -202,9 +170,26 @@
       {% endif %}
       <p><strong>Ultimo Himno:&nbsp;</strong> {{agenda.himno_set.values | himno:'4to'}}</p>
       <p><strong>Ultima Oracion:&nbsp;</strong> {{agenda.oracion_set.values | oracion:'final'}}</p>
+      <div style="break-inside: avoid;">
+        <p><strong>Anuncios</strong></p>
+        <ul>
+          {% if agenda.actividad_set.values|length > 0 %}
+            {% for anuncio in agenda.actividad_set.values %}
+              <li class="with-bullet"><strong>{{anuncio.titulo}}</strong> ({{anuncio.organizacion}}) <i>{{anuncio.fecha|date:"l j F P"}}</i> - {{anuncio.descripcion}}</li>
+            {% endfor %}
+          {% endif %}
+          {% if agenda.limpieza_set.values|length > 0 %}
+            {% for limpieza in agenda.limpieza_set.all %}
+              <li class="with-bullet"><strong>Limpieza:&nbsp;</strong>- {{limpieza.organizacion}} tiene asignada la limpieza esta semana
+              </li>
+            {% endfor %}
+          {% endif %}
+          <p><span class="divider"></span></p>
+          <p><span class="divider"></span></p>
+        </ul>
+      </div>
     </main>
     <footer>
-      <br /><br /><br /><br /><br />
       <img src="https://www.churchofjesuschrist.org/imgs/0fd2691a8a019111765601085628ed5183d2c812/full/200%2C/0/default.png" alt="Iglesia logo">
     </footer>
   {% else %}
