@@ -22,8 +22,6 @@ def home(request):
 def agenda_pdf(request, pk):
 
     agenda = Agenda.objects.get(pk=pk)
-    for anuncio in agenda.actividad_set.all():
-        print(anuncio.organizacion.nombre)
     template = get_template("api/agenda.html")
     context = {"agenda": agenda}
     html = template.render(context)

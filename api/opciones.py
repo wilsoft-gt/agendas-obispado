@@ -2,7 +2,10 @@ LLAMAMIENTOS = {
 	"ob": "Obispo",
 	"1c": "Primer Consejero",
 	"2c": "Segundo Consejero",
-	"sc": "Secretario"
+	"sc": "Secretario",
+    "ps": "Presidente de estaca",
+    "1ps": "Primer consejero de estaca",
+    "2ps": "Segundo consejero de estaca",
 }
 
 TIPO_ORACION = {
