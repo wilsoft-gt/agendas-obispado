@@ -13,7 +13,6 @@ def himno(data, tipo):
 @register.filter
 def oracion(data, tipo):
     for value in data:
-        print(value)
         if value.get("tipo") == tipo:
             nombre = Miembro.objects.get(pk=value.get("nombre_id"))
             return nombre.nombre
