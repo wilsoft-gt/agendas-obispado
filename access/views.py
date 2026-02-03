@@ -47,7 +47,7 @@ class EndPointViewset(APIView):
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
         
     def handle_discursante(self, handler):
-        discursantes = Discursante.objects.filter(agenda__fecha=proximo_domingo())
+        discursantes = Discurso.objects.filter(agenda__fecha=proximo_domingo())
         if discursantes:
             dis_lista = [f"\n{dis.nombre} - _{dis.tema}_" for dis in discursantes]
             body = f"*Lista de discursantes para el domingo {proximo_domingo().strftime('%d/%m/%Y')}:* {''.join(dis_lista)}"
