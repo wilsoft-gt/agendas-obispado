@@ -108,12 +108,12 @@ admin.site.register(Miembro,MiembroAdmin)
 
 class HimnoInline(admin.TabularInline):
 	model=Himno
-	extra = 1
+	extra = 0
 
 
 class DiscursoInline(admin.TabularInline):
 	model=Discurso
-	extra=1
+	extra=0
 	max_num=5
 	autocomplete_fields = ['nombre']
 
@@ -151,6 +151,7 @@ class ActividadInline(admin.TabularInline):
 
 class AsuntoInline(admin.TabularInline):
 	model=Asunto.agenda.through
+	extra = 0
 	autocomplete_fields = ['asunto']
 	verbose_name = "Asunto"
 	verbose_name_plural = "Asuntos"
