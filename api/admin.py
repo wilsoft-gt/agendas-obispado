@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.html import format_html
 from django.db.models import OuterRef, Subquery
 from .models import Obispado, Organizacion, Templo, Limpieza, Asunto, Actividad, Agenda, Himno, Oracion, Discurso, Miembro
-from datetime import datetime
+from datetime import date, datetime
 # Register your models here.
 
 admin.site.site_header = "Barrio Pinares 1"
@@ -21,13 +21,15 @@ admin.site.register(Organizacion, FiftyPerPageAdmin)
 
 class AsuntoAdmin(FiftyPerPageAdmin):
 	search_fields = ['titulo', 'descripcion', 'organizacion__nombre']
+	
+
+admin.site.register(Asunto, AsuntoAdmin)
 
 
 class TemploAdmin(FiftyPerPageAdmin):
 	search_fields = ['observaciones', 'reservado_por__nombre']
 
 
-admin.site.register(Asunto, AsuntoAdmin)
 admin.site.register(Templo, TemploAdmin)
 
 
@@ -40,29 +42,42 @@ admin.site.register(Actividad, ActividadAdmin)
 
 
 def calcular_fechas(fecha):
-	delta = datetime.today().date() - fecha
-	años = int(delta.days / 365)
-	meses = int(delta.days / 30)
-	semanas = int(delta.days / 7)
-	if (años > 0):
-		if (años == 1):
-			return f'{años} año'
-		else:
-			return f'{años} años'
-	if (meses > 0):
-		if meses == 1:
-			return f'{meses} mes'
-		else:
-			return f'{meses} meses'
-	if (semanas > 0):
-		if semanas == 1:
-			return f'{semanas} semana'
-		else:
-			return f'{semanas} semanas'
-	if delta.days == 1:
-		return f'{delta.days} dia'
-	else:
-		return f'{delta.days} dias'
+	if isinstance(fecha, datetime):
+		fecha = fecha.date()
+	hoy = date.today()
+	futura = fecha > hoy
+	fecha_comparacion = fecha if futura else hoy
+	hoy_comparacion = hoy if futura else fecha
+
+	def expresar(valor, singular, plural):
+		texto = singular if valor == 1 else plural
+		return f'{valor} {texto}'
+
+	def prefijo(texto):
+		return f'En {texto}' if futura else f'Hace {texto}'
+
+	años = fecha_comparacion.year - hoy_comparacion.year
+	try:
+		aniversario = hoy_comparacion.replace(year=fecha_comparacion.year)
+	except ValueError:
+		aniversario = hoy_comparacion.replace(year=fecha_comparacion.year, day=28)
+	if aniversario > fecha_comparacion:
+		años -= 1
+	if años:
+		return prefijo(expresar(años, 'año', 'años'))
+
+	meses = ((fecha_comparacion.year - hoy_comparacion.year) * 12
+			 + fecha_comparacion.month - hoy_comparacion.month)
+	if fecha_comparacion.day < hoy_comparacion.day:
+		meses -= 1
+	if meses:
+		return prefijo(expresar(meses, 'mes', 'meses'))
+
+	dias = abs((hoy - fecha).days)
+	semanas = dias // 7
+	if semanas:
+		return prefijo(expresar(semanas, 'semana', 'semanas'))
+	return prefijo(expresar(dias, 'día', 'días'))
 
 
 class MiembroAdmin(FiftyPerPageAdmin):
@@ -86,7 +101,7 @@ class MiembroAdmin(FiftyPerPageAdmin):
 	def ultimoDiscurso(self, obj):
 		fecha = getattr(obj, 'ultimo_discurso_fecha', None)
 		if fecha:
-			return format_html(f'<span>Hace {calcular_fechas(fecha)} ({fecha})</span>')
+			return format_html(f'<span>{calcular_fechas(fecha)} ({fecha})</span>')
 		return format_html('<span>No ha discursado</span>')
 
 	def ultimoDiscursoTema(self, obj):
@@ -98,7 +113,7 @@ class MiembroAdmin(FiftyPerPageAdmin):
 	def ultimaOracion(self, obj):
 		fecha = getattr(obj, 'ultima_oracion_fecha', None)
 		if fecha:
-			return format_html(f'<span>Hace {calcular_fechas(fecha)} ({fecha})</span>')
+			return format_html(f'<span>{calcular_fechas(fecha)} ({fecha})</span>')
 		return format_html('<span>No ha orado</span>')
 
 	ultimoDiscurso.admin_order_field = 'ultimo_discurso_fecha'
