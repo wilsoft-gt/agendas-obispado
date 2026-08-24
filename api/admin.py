@@ -11,7 +11,13 @@ admin.site.site_title = "Barrio Pianres 1"
 admin.site.register(Obispado)
 admin.site.register(Organizacion)
 admin.site.register(Asunto)
-admin.site.register(Actividad)
+
+
+class ActividadAdmin(admin.ModelAdmin):
+	search_fields = ['titulo', 'lugar', 'organizacion__nombre']
+
+
+admin.site.register(Actividad, ActividadAdmin)
 
 
 
@@ -108,13 +114,12 @@ class OracionInline(admin.TabularInline):
 	descargar.short_description="Carta"
 	readonly_fields = ("descargar",)
 
-
 class ActividadInline(admin.TabularInline):
 	model=Actividad.agenda.through
 	extra = 1
 	verbose_name = "Actividad"
 	verbose_name_plural = "Actividades"
-
+	autocomplete_fields = ['actividad']
 
 class AsuntoInline(admin.TabularInline):
 	model=Asunto.agenda.through

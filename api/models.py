@@ -6,7 +6,7 @@ from .opciones import LLAMAMIENTOS, LISTA_HIMNOS, TIPO_HIMNO, TIPO_ORACION
 
 class Obispado(models.Model):
 	nombre = models.CharField(max_length=50)
-	llamamiento = models.CharField(choices=LLAMAMIENTOS, max_length=2)
+	llamamiento = models.CharField(choices=LLAMAMIENTOS, max_length=4)
 	class Meta(object):
 		verbose_name_plural = "Obispado"
 	def __str__(self):
@@ -57,7 +57,7 @@ class Entrevista(models.Model):
 class Himno(models.Model):
 	numero = models.CharField(choices=LISTA_HIMNOS, max_length=50)
 	tipo = models.CharField(choices=TIPO_HIMNO, max_length=3)
-	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
+	agenda = models.ForeignKey(Agenda, on_delete=models.SET_NULL, blank=True, null=True)
 
 	def __str__(self):
 		return self.numero
@@ -66,7 +66,7 @@ class Limpieza(models.Model):
 	fecha = models.DateField(auto_now=False, auto_now_add=False)
 	organizacion = models.ForeignKey(Organizacion, models.SET_NULL, blank=False, null=True)
 	finalizada = models.BooleanField()
-	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
+	agenda = models.ForeignKey(Agenda, on_delete=models.SET_NULL, blank=True, null=True)
 	class Meta(object):
 		verbose_name_plural = "Limpieza"
 	
@@ -81,10 +81,10 @@ class Miembro(models.Model):
 
 
 class Oracion(models.Model):
-	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, null=True)
+	nombre = models.ForeignKey(Miembro, on_delete=models.SET_NULL, blank=True, null=True)
 	tipo = models.CharField(choices=TIPO_ORACION, max_length=10, blank=True)
 	confirmado = models.BooleanField(default=False)
-	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
+	agenda = models.ForeignKey(Agenda, on_delete=models.SET_NULL, blank=True, null=True)
 	def __str__(self):
 		return f"{self.agenda} - {self.nombre}"
 	
@@ -116,9 +116,9 @@ class Actividad(models.Model):
 
 
 class Discurso(models.Model):
-	nombre = models.ForeignKey(Miembro, on_delete=models.CASCADE, null=True)
+	nombre = models.ForeignKey(Miembro, on_delete=models.SET_NULL, blank=True, null=True)
 	tema = models.CharField(max_length=50)
 	cofirmado = models.BooleanField(default=False)
-	agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, blank=True, null=True)
+	agenda = models.ForeignKey(Agenda, on_delete=models.SET_NULL, blank=True, null=True)
 	def __str__(self):
 		return	f"{self.nombre.nombre} - {self.tema}"
