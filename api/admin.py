@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.html import format_html
+from django.db.models import OuterRef, Subquery
 from .models import Obispado, Organizacion, Templo, Limpieza, Asunto, Actividad, Agenda, Himno, Oracion, Discurso, Miembro
 from datetime import datetime
 # Register your models here.
@@ -48,30 +49,44 @@ def calcular_fechas(fecha):
 
 
 class MiembroAdmin(admin.ModelAdmin):
-	model=Miembro
+	model = Miembro
+	search_fields = ['nombre']
+
+	def get_queryset(self, request):
+		queryset = super().get_queryset(request)
+		latest_discurso = Discurso.objects.filter(
+			nombre=OuterRef('pk'), agenda__isnull=False
+		).order_by('-agenda__fecha')
+		latest_oracion = Oracion.objects.filter(
+			nombre=OuterRef('pk'), agenda__isnull=False
+		).order_by('-agenda__fecha')
+		return queryset.annotate(
+			ultimo_discurso_fecha=Subquery(latest_discurso.values('agenda__fecha')[:1]),
+			ultimo_discurso_tema=Subquery(latest_discurso.values('tema')[:1]),
+			ultima_oracion_fecha=Subquery(latest_oracion.values('agenda__fecha')[:1]),
+		)
+
 	def ultimoDiscurso(self, obj):
-		discursos = obj.discurso_set.all()
-		if obj.pk is not None and discursos:
-			fecha = discursos.order_by("-agenda")[0].agenda.fecha
+		fecha = getattr(obj, 'ultimo_discurso_fecha', None)
+		if fecha:
 			return format_html(f'<span>Hace {calcular_fechas(fecha)} ({fecha})</span>')
-		else:
-			return format_html(f'<span>No ha discursado</span>')
+		return format_html('<span>No ha discursado</span>')
 
 	def ultimoDiscursoTema(self, obj):
-		discurso = obj.discurso_set.all()
-		if obj.pk is not None and discurso:
-			print(discurso.order_by("-agenda")[0].tema)
-			return format_html(f'<span>{discurso.order_by("-agenda")[0].tema}</span>')
-		else:
-			return format_html("<span>Sin datos</span>")
+		tema = getattr(obj, 'ultimo_discurso_tema', None)
+		if tema:
+			return format_html(f'<span>{tema}</span>')
+		return format_html('<span>Sin datos</span>')
 	
 	def ultimaOracion(self, obj):
-		oraciones = obj.oracion_set.all()
-		if obj.pk is not None and oraciones:
-			fecha = oraciones.order_by("-agenda")[0].agenda.fecha
+		fecha = getattr(obj, 'ultima_oracion_fecha', None)
+		if fecha:
 			return format_html(f'<span>Hace {calcular_fechas(fecha)} ({fecha})</span>')
-		else:
-			return format_html(f'<span>No ha orado</span>')
+		return format_html('<span>No ha orado</span>')
+
+	ultimoDiscurso.admin_order_field = 'ultimo_discurso_fecha'
+	ultimoDiscursoTema.admin_order_field = 'ultimo_discurso_tema'
+	ultimaOracion.admin_order_field = 'ultima_oracion_fecha'
 	ultimoDiscurso.short_description = "Ultimo Discurso"
 	ultimaOracion.short_description = "Ultima Oracion"
 	ultimoDiscursoTema.short_description = "Tema"
