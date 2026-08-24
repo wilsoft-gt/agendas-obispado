@@ -11,7 +11,18 @@ admin.site.site_header = "Barrio Pinares 1"
 admin.site.site_title = "Barrio Pianres 1"
 admin.site.register(Obispado)
 admin.site.register(Organizacion)
-admin.site.register(Asunto)
+
+
+class AsuntoAdmin(admin.ModelAdmin):
+	search_fields = ['titulo', 'descripcion', 'organizacion__nombre']
+
+
+class TemploAdmin(admin.ModelAdmin):
+	search_fields = ['observaciones', 'reservado_por__nombre']
+
+
+admin.site.register(Asunto, AsuntoAdmin)
+admin.site.register(Templo, TemploAdmin)
 
 
 class ActividadAdmin(admin.ModelAdmin):
@@ -104,6 +115,7 @@ class DiscursoInline(admin.TabularInline):
 	model=Discurso
 	extra=1
 	max_num=5
+	autocomplete_fields = ['nombre']
 
 	def descargar(self, obj):
 		if obj.pk is not None:
@@ -117,6 +129,7 @@ class DiscursoInline(admin.TabularInline):
 class OracionInline(admin.TabularInline):
 	model=Oracion
 	max_num=2
+	autocomplete_fields = ['nombre']
 	verbose_name="Oracion"
 	verbose_name_plural="Oraciones"
 
@@ -138,11 +151,13 @@ class ActividadInline(admin.TabularInline):
 
 class AsuntoInline(admin.TabularInline):
 	model=Asunto.agenda.through
+	autocomplete_fields = ['asunto']
 	verbose_name = "Asunto"
 	verbose_name_plural = "Asuntos"
 
 class TemploInline(admin.TabularInline):
 	model=Templo.agenda.through
+	autocomplete_fields = ['templo']
 	verbose_name = "Visita al templo"
 	verbose_name_plural = "Visitas al templo"
 	extra = 1
