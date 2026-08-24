@@ -9,15 +9,21 @@ from datetime import datetime
 
 admin.site.site_header = "Barrio Pinares 1"
 admin.site.site_title = "Barrio Pianres 1"
-admin.site.register(Obispado)
-admin.site.register(Organizacion)
 
 
-class AsuntoAdmin(admin.ModelAdmin):
+class FiftyPerPageAdmin(admin.ModelAdmin):
+	list_per_page = 50
+
+
+admin.site.register(Obispado, FiftyPerPageAdmin)
+admin.site.register(Organizacion, FiftyPerPageAdmin)
+
+
+class AsuntoAdmin(FiftyPerPageAdmin):
 	search_fields = ['titulo', 'descripcion', 'organizacion__nombre']
 
 
-class TemploAdmin(admin.ModelAdmin):
+class TemploAdmin(FiftyPerPageAdmin):
 	search_fields = ['observaciones', 'reservado_por__nombre']
 
 
@@ -25,7 +31,7 @@ admin.site.register(Asunto, AsuntoAdmin)
 admin.site.register(Templo, TemploAdmin)
 
 
-class ActividadAdmin(admin.ModelAdmin):
+class ActividadAdmin(FiftyPerPageAdmin):
 	search_fields = ['titulo', 'lugar', 'organizacion__nombre']
 
 
@@ -59,7 +65,7 @@ def calcular_fechas(fecha):
 		return f'{delta.days} dias'
 
 
-class MiembroAdmin(admin.ModelAdmin):
+class MiembroAdmin(FiftyPerPageAdmin):
 	model = Miembro
 	search_fields = ['nombre']
 
@@ -164,7 +170,7 @@ class TemploInline(admin.TabularInline):
 	extra = 1
 
 
-class AgendaAdmin(admin.ModelAdmin): 
+class AgendaAdmin(FiftyPerPageAdmin): 
 	inlines = [
 		HimnoInline,
 		OracionInline,
